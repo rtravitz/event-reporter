@@ -9,24 +9,24 @@ class EventReporterTest < Minitest::Test
     assert_instance_of EventReporter, reporter
   end
 
-  def test_load_converts_data_to_hash
+  def test_load_sends_records_to_dataset
     reporter = EventReporter.new
-    reporter.load
+    reporter.load("./data/short_attendees.csv")
     expected =  {
                   :reg_date=>nil, :first_name=>"Allison",:last_name=>"Nguyen",
                   :email_address=>"arannon@jumpstartlab.com", :home_phone=>nil,
                   :street=>"3155 19th St NW", :city=>"Washington", :state=>"DC",
                   :zipcode=>"20010"
                 }
-    assert_equal expected, reporter.dataset[1]
+    assert_equal expected, reporter.dataset[0]
   end
 
-  def test_find_returns_correct_results_for_attribute_and_criteria
+  def test_find_returns_correct_number_of_results_for_attributes_and_criteria
     reporter = EventReporter.new
     reporter.load("./data/short_attendees.csv")
     reporter.find("first_name sarah")
 
-    assert_equal "", reporter.queue.data
+    assert_equal 2, reporter.queue.data.count
   end
 
 
