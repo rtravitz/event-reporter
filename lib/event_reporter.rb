@@ -9,7 +9,7 @@ class EventReporter
     @queue = Queue.new
   end
 
-  def load(file_path = "./data/short_attendees.csv")
+  def load(file_path = "./data/event_attendees.csv")
     @dataset = Array.new
     send_csv_data_to_dataset(file_path)
   end
@@ -38,3 +38,8 @@ class EventReporter
     end
   end
 end
+
+er = EventReporter.new
+er.load
+er.find("first_name sarah")
+er.queue.printing
