@@ -9,16 +9,12 @@ class EventReporterTest < Minitest::Test
     assert_instance_of EventReporter, reporter
   end
 
-  def test_load_sends_records_to_dataset
+  def test_load_sends_people_and_information_to_dataset
     reporter = EventReporter.new
     reporter.load("./data/short_attendees.csv")
-    expected =  {
-                  :regdate=>"11/12/08 10:47", :first_name=>"Allison",:last_name=>"Nguyen",
-                  :email_address=>"arannon@jumpstartlab.com", :homephone=>"6154385000",
-                  :street=>"3155 19th St NW", :city=>"Washington", :state=>"DC",
-                  :zipcode=>"20010"
-                }
-    assert_equal expected, reporter.dataset[0]
+
+    assert_instance_of Person, reporter.dataset[0]
+    assert_equal "Allison", reporter.dataset[0].first_name
   end
 
   def test_find_returns_correct_results_for_attributes_and_criteria
@@ -27,7 +23,7 @@ class EventReporterTest < Minitest::Test
     reporter.find("first_name sarah")
 
     reporter.queue.data.each do |record|
-      assert_equal record[:first_name].downcase, "sarah"
+      assert_equal record.send("first_name").downcase, "sarah"
     end
 
     assert_equal 2, reporter.queue.count
@@ -40,9 +36,9 @@ class EventReporterTest < Minitest::Test
     reporter.find("first_name sarah")
     record = reporter.queue.data.first
 
-    assert_equal "20009", record[:zipcode]
-    assert_equal "4145205000", record[:homephone]
-    assert_equal "", record[:city]
+    assert_equal "20009", record.send("zipcode")
+    assert_equal "4145205000", record.send("homephone")
+    assert_equal "", record.send("city")
   end
 
   def test_help_returns_proper_help_text
@@ -53,8 +49,5 @@ class EventReporterTest < Minitest::Test
     assert_equal "Empty the queue.", reporter.help("queue clear")
     assert_equal "This is not a valid command.", reporter.help("wrong command")
   end
-
-  
-
 
 end

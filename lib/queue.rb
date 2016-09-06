@@ -26,17 +26,21 @@ class Queue
     print_one_subset_at_a_time(subsets, header_lengths, total_records)
   end
 
-  # def save_to(path)
-  #   path = "./" + path
-  #   CSV.open(path, "wb") do |csv|
-  #     headers = [:regdate, :first_name, :last_name, :email_address,
-  #       :homephone, :city, :street, :state, :zipcode, :district]
-  #     csv << headers
-  #     @data.each do |record|
-  #       csv << record.values
-  #     end
-  #   end
-  # end
+  def save_to(path)
+    path = "./" + path
+    CSV.open(path, "wb") do |csv|
+      headers = ["regdate", "first_name", "last_name", "email_address",
+        "homephone", "city", "street", "state", "zipcode", "district"]
+      csv << headers
+      @data.each do |person|
+        values = Array.new
+        headers.each do |category|
+          values << person.send(category)
+        end
+        csv << values
+      end
+    end
+  end
 
   private
 

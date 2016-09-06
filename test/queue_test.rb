@@ -37,8 +37,8 @@ class QueueTest < Minitest::Test
     reporter.queue.save_to("testing_save.csv")
     reporter.load("./testing_save.csv")
 
-    assert_equal "sarah", reporter.dataset[0][:first_name].downcase
-    assert_equal "33703", reporter.dataset[1][:zipcode]
+    assert_equal "sarah", reporter.dataset[0].send("first_name").downcase
+    assert_equal "33703", reporter.dataset[1].send("zipcode")
     assert_equal 2, reporter.dataset.count
   end
 

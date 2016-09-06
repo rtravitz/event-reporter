@@ -72,8 +72,3 @@ class EventReporter
   end
 
 end
-
-er = EventReporter.new
-er.load
-er.find("first_name sarah")
-er.queue.printing
