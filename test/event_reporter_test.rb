@@ -54,5 +54,7 @@ class EventReporterTest < Minitest::Test
     assert_equal "This is not a valid command.", reporter.help("wrong command")
   end
 
+  
+
 
 end
