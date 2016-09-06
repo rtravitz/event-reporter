@@ -30,27 +30,27 @@ class QueueTest < Minitest::Test
     assert_equal 0, reporter.queue.count
   end
 
-  def test_sunlight_returns_districts_for_fewer_than_10_in_queue
-    skip
-    reporter = EventReporter.new
-    # reporter.load("./data/event_attendees.csv")
-    # reporter.find("first_name sarah")
-    # expected = "The queue has too many entries to find legislators."
-    #
-    # assert_equal expected, reporter.queue.district
-
-    reporter.load("./data/short_attendees.csv")
-    reporter.find("first_name sarah")
-    reporter.queue.district
-
-    assert_equal "", reporter.queue.data[0][:district]
-  end
+  # def test_sunlight_returns_districts_for_fewer_than_10_in_queue
+  #   skip
+  #   reporter = EventReporter.new
+  #   # reporter.load("./data/event_attendees.csv")
+  #   # reporter.find("first_name sarah")
+  #   # expected = "The queue has too many entries to find legislators."
+  #   #
+  #   # assert_equal expected, reporter.queue.district
+  #
+  #   reporter.load("./data/short_attendees.csv")
+  #   reporter.find("first_name sarah")
+  #   reporter.queue.district
+  # 
+  #   assert_equal "", reporter.queue.data[0][:district]
+  # end
 
   def test_print_returns_formatted_data
     reporter = EventReporter.new
     reporter.load("./data/short_attendees.csv")
 
-    
+
   end
 
 end
