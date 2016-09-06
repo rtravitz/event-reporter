@@ -17,14 +17,19 @@ class EventReporter
     # clean_dataset
   end
 
-  # def find(user_input)
-  #   @queue.clear
-  #   attribute = user_input.split.first.to_sym
-  #   criteria = user_input.split.last.downcase
-  #   @dataset.each do |record|
-  #     @queue.data << record if record[attribute].downcase == criteria
-  #   end
-  # end
+  def find(user_input)
+    @queue.clear
+    attribute, criteria = user_input.downcase.split
+    @dataset.each do |person|
+      @queue.data << person if person.send(attribute).downcase == criteria
+    end
+
+    # attribute = user_input.split.first.to_sym
+    # criteria = user_input.split.last.downcase
+    # @dataset.each do |record|
+    #   @queue.data << record if record[attribute].downcase == criteria
+    # end
+  end
 
   def help(command = "")
     helper = HelpText.new
@@ -77,4 +82,5 @@ end
 
 er = EventReporter.new
 er.load("./data/short_attendees.csv")
+er.find("first_name sarah")
 require "pry"; binding.pry
