@@ -1,6 +1,3 @@
-# require "rubygems"
-# require "sunlight"
-# Sunlight::Base.api_key = "bb3a1ba8af354f1dbfb1769f4cd893bb"
 
 class Queue
   attr_accessor :data
@@ -29,16 +26,6 @@ class Queue
   end
 
 
-  # def district
-  #   if count > 0 && count <= 10
-  #     @data.each do |record|
-  #       address = {:address => "#{record[:street]} #{record[:city]}, #{record[:state]}"}
-  #       record[:district] = get_district_by_address(address)
-  #     end
-  #   else
-  #     "The queue has too many entries to find legislators."
-  #   end
-  # end
 
   private
 
@@ -108,8 +95,6 @@ class Queue
       record_numbers[1] += subsets[counter].count unless subsets[counter].nil?
     end
   end
-  # def get_district_by_address(address)
-  #   Sunlight::District.get(address)
-  # end
+
 
 end

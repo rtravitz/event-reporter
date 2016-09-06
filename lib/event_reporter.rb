@@ -1,5 +1,6 @@
 require "csv"
 require "./lib/queue"
+require "./lib/help_text"
 
 class EventReporter
   attr_reader :dataset, :queue
@@ -23,6 +24,22 @@ class EventReporter
       @queue.data << record if record[attribute].downcase == criteria
     end
   end
+
+  def help(command = "")
+    helper = HelpText.new
+    if command.empty?
+      puts helper.help_text
+      helper.help_text
+    elsif helper.help_text_for_commands.include?(command)
+      puts helper.help_text_for_commands[command]
+      helper.help_text_for_commands[command]
+    else
+      puts "This is not a valid command."
+      "This is not a valid command."
+    end
+  end
+
+
 
   private
 
