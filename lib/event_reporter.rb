@@ -14,7 +14,6 @@ class EventReporter
   def load(file_path = "./data/event_attendees.csv")
     @dataset = Array.new
     send_csv_data_to_dataset(file_path)
-    # clean_dataset
   end
 
   def find(user_input)
@@ -23,12 +22,6 @@ class EventReporter
     @dataset.each do |person|
       @queue.data << person if person.send(attribute).downcase == criteria
     end
-
-    # attribute = user_input.split.first.to_sym
-    # criteria = user_input.split.last.downcase
-    # @dataset.each do |record|
-    #   @queue.data << record if record[attribute].downcase == criteria
-    # end
   end
 
   def help(command = "")
@@ -81,6 +74,6 @@ class EventReporter
 end
 
 er = EventReporter.new
-er.load("./data/short_attendees.csv")
+er.load
 er.find("first_name sarah")
-require "pry"; binding.pry
+er.queue.printing
