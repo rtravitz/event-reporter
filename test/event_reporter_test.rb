@@ -29,6 +29,14 @@ class EventReporterTest < Minitest::Test
     assert_equal 2, reporter.queue.data.count
   end
 
+  def test_data_is_cleaned
+    reporter = EventReporter.new
+    reporter.load("./data/short_attendees.csv")
+
+    find("first_name sarah")
+
+    assert_equal "", queue.data.first[:zipcode]
+  end
 
 
 end

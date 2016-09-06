@@ -9,7 +9,7 @@ class Queue
     @data = Array.new
     @order = { :last_name=>"LAST NAME", :first_name=>"FIRST NAME",
       :email_address=>"EMAIL", :zipcode=>"ZIPCODE", :city=>"CITY",
-      :state=>"STATE", :street=>"ADDRESS", :home_phone=>"PHONE",
+      :state=>"STATE", :street=>"ADDRESS", :homephone=>"PHONE",
       :district=>"DISTRICT" }
   end
 
@@ -43,7 +43,7 @@ class Queue
   private
 
   def print_header(header_lengths)
-    total_length = header_lengths.values.inject(:+) + (4 * header_lengths.count)
+    total_length = header_lengths.values.inject(:+) + (2 * header_lengths.count)
     puts "-" * total_length
     @order.each do |key, header|
       unless header_lengths[key].nil? || header_lengths[key].zero?
@@ -66,8 +66,8 @@ class Queue
   end
 
   def find_greatest_length_per_column
-    highest_total = {:reg_date=>0, :first_name=> 10, :last_name=>9,
-      :email_address=>5, :home_phone=>5, :street=>7, :city=>4, :state=>5, :zipcode=>7}
+    highest_total = {:regdate=>0, :first_name=> 10, :last_name=>9,
+      :email_address=>5, :homephone=>5, :street=>7, :city=>4, :state=>5, :zipcode=>7}
       @data.each do |record|
         record.each do |key, value|
           unless value.nil?

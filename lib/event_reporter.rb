@@ -12,6 +12,7 @@ class EventReporter
   def load(file_path = "./data/event_attendees.csv")
     @dataset = Array.new
     send_csv_data_to_dataset(file_path)
+    clean_dataset
   end
 
   def find(user_input)
@@ -26,8 +27,8 @@ class EventReporter
   private
 
   def send_csv_data_to_dataset(file_path)
-    header_names = [  :reg_date, :first_name, :last_name, :email_address,
-                      :home_phone, :street, :city, :state, :zipcode ]
+    header_names = [  :regdate, :first_name, :last_name, :email_address,
+                      :homephone, :street, :city, :state, :zipcode ]
 
     CSV.foreach file_path, headers: true, header_converters: :symbol do |row|
       record = Hash.new
@@ -37,9 +38,29 @@ class EventReporter
       @dataset << record
     end
   end
-end
 
-er = EventReporter.new
-er.load
-er.find("first_name sarah")
-er.queue.printing
+  def clean_dataset
+    @dataset.each do |record|
+      record.each do |key, value|
+        record[key] = "" if value.nil?
+      end
+      record[:zipcode] = clean_zipcode(record[:zipcode])
+      record[:homephone] = clean_phone_numbers(record[:homephone])
+    end
+  end
+
+  def clean_zipcode(zipcode)
+    zipcode = zipcode.to_s.rjust(5,"0")[0..4]
+    zipcode.gsub!("00000", "")
+    zipcode
+  end
+
+  def clean_phone_numbers(number)
+    number = "" if number == "0"
+    unless number.empty?
+      number = number.gsub(/[\s+.()+E-]/, "").rjust(10, "0")
+    end
+    number[0..9]
+  end
+
+end

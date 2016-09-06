@@ -42,15 +42,15 @@ class QueueTest < Minitest::Test
   #   reporter.load("./data/short_attendees.csv")
   #   reporter.find("first_name sarah")
   #   reporter.queue.district
-  # 
+  #
   #   assert_equal "", reporter.queue.data[0][:district]
   # end
 
   def test_print_returns_formatted_data
     reporter = EventReporter.new
-    reporter.load("./data/short_attendees.csv")
-
-
+    reporter.load
   end
+
+
 
 end
