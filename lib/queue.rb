@@ -22,11 +22,18 @@ class Queue
     @data.count
   end
 
-  def printing
+  def printing(dataset = @data)
     header_lengths = find_greatest_length_per_column
     total_records = @data.count
-    subsets = split_data_into_subsets_of_ten
+    subsets = split_data_into_subsets_of_ten(dataset)
     print_one_subset_at_a_time(subsets, header_lengths, total_records)
+  end
+
+  def print_by(category)
+    sorted = @data.sort_by do |person|
+      person.send(category)
+    end
+    printing(sorted)
   end
 
   def export_to_html(file_name)
@@ -72,23 +79,23 @@ class Queue
     end
   end
 
-    def find_greatest_length_per_column
-      highest_total = {"regdate"=>0, "first_name"=> 10, "last_name"=>9,
-        "email_address"=>5, "homephone"=>5, "street"=>7, "city"=>4, "state"=>5, "zipcode"=>7}
-      @data.each do |person|
-        highest_total.keys.each do |header|
-          if person.send(header).length > highest_total[header]
-            highest_total[header] = person.send(header).length
-          end
+  def find_greatest_length_per_column
+    highest_total = {"regdate"=>0, "first_name"=> 10, "last_name"=>9,
+      "email_address"=>5, "homephone"=>5, "street"=>7, "city"=>4, "state"=>5, "zipcode"=>7}
+    @data.each do |person|
+      highest_total.keys.each do |header|
+        if person.send(header).length > highest_total[header]
+          highest_total[header] = person.send(header).length
         end
       end
-      highest_total
     end
+    highest_total
+  end
 
-  def split_data_into_subsets_of_ten
+  def split_data_into_subsets_of_ten(dataset)
     record_subsets = Array.new
     single_subset = Array.new
-    @data.each do |record|
+    dataset.each do |record|
       if single_subset.count == 10
         record_subsets << single_subset
         single_subset = Array.new

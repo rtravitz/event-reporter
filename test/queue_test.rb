@@ -42,6 +42,24 @@ class QueueTest < Minitest::Test
     assert_equal 2, reporter.dataset.count
   end
 
+  def test_export_to_html_creates_new_file
+    reporter = EventReporter.new
+    reporter.load("./data/short_attendees.csv")
+    reporter.find("first_name sarah")
+    reporter.queue.export_to_html("testing_export.html")
+
+    file_text = File.open("testing_export.html", "r").map{|line| line}
+
+    assert_equal "<html>\n", file_text[0]
+  end
+
+  def test_print_by_sorts_data_for_printing
+    reporter = EventReporter.new
+    reporter.load
+    reporter.find("first_name sarah")
+
+  end
+
   # def test_sunlight_returns_districts_for_fewer_than_10_in_queue
   #   skip
   #   reporter = EventReporter.new
