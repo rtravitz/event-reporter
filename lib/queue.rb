@@ -1,4 +1,5 @@
 require "csv"
+require "erb"
 
 class Queue
   attr_accessor :data
@@ -9,6 +10,8 @@ class Queue
       "email_address"=>"EMAIL", "zipcode"=>"ZIPCODE", "city"=>"CITY",
       "state"=>"STATE", "street"=>"ADDRESS", "homephone"=>"PHONE",
       "district"=>"DISTRICT" }
+    @headers = ["regdate", "first_name", "last_name", "email_address",
+        "homephone", "city", "street", "state", "zipcode", "district"]
   end
 
   def clear
@@ -26,15 +29,17 @@ class Queue
     print_one_subset_at_a_time(subsets, header_lengths, total_records)
   end
 
-  def save_to(path)
-    path = "./" + path
-    CSV.open(path, "wb") do |csv|
-      headers = ["regdate", "first_name", "last_name", "email_address",
-        "homephone", "city", "street", "state", "zipcode", "district"]
-      csv << headers
+  def export_to_html(file_name)
+    template = ERB.new(File.read("./data/export_format.erb")).result(binding)
+    File.open(file_name, "w"){|file| file.puts template}
+  end
+
+  def save_to(file_name)
+    CSV.open(file_name, "wb") do |csv|
+      csv << @headers
       @data.each do |person|
         values = Array.new
-        headers.each do |category|
+        @headers.each do |category|
           values << person.send(category)
         end
         csv << values
