@@ -55,13 +55,6 @@ class QueueTest < Minitest::Test
     assert_equal "<html>\n", file_text[0]
   end
 
-  def test_print_by_sorts_data_for_printing
-    reporter = EventReporter.new
-    reporter.load
-    reporter.find("first_name sarah")
-
-  end
-
   def test_sunlight_returns_districts_for_fewer_than_10_in_queue
     reporter = EventReporter.new
     reporter.load
