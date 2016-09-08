@@ -17,10 +17,16 @@ class EventReporter
   end
 
   def find(user_input)
-    @queue.clear
-    attribute, criteria = user_input.downcase.split
-    @dataset.each do |person|
-      @queue.data << person if person.send(attribute).downcase == criteria
+    if @dataset.empty?
+      puts "No file has been loaded to search."
+    else
+      @queue.clear
+      attribute = user_input.downcase.split.first
+      criteria = user_input.downcase.split[1..-1].join(" ")
+      @dataset.each do |person|
+        @queue.data << person if person.send(attribute).downcase == criteria
+      end
+      puts "Added results for '#{attribute} #{criteria}' to the queue."
     end
   end
 
@@ -72,8 +78,3 @@ class EventReporter
   end
 
 end
-
-er = EventReporter.new
-er.load
-er.find("first_name sarah")
-er.queue.print_by("last_name")

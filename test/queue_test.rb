@@ -34,6 +34,7 @@ class QueueTest < Minitest::Test
     reporter = EventReporter.new
     reporter.load("./data/short_attendees.csv")
     reporter.find("first_name sarah")
+    reporter.queue.district
     reporter.queue.save_to("testing_save.csv")
     reporter.load("./testing_save.csv")
 
@@ -46,6 +47,7 @@ class QueueTest < Minitest::Test
     reporter = EventReporter.new
     reporter.load("./data/short_attendees.csv")
     reporter.find("first_name sarah")
+    reporter.queue.district
     reporter.queue.export_to_html("testing_export.html")
 
     file_text = File.open("testing_export.html", "r").map{|line| line}
@@ -60,27 +62,18 @@ class QueueTest < Minitest::Test
 
   end
 
-  # def test_sunlight_returns_districts_for_fewer_than_10_in_queue
-  #   skip
-  #   reporter = EventReporter.new
-  #   # reporter.load("./data/event_attendees.csv")
-  #   # reporter.find("first_name sarah")
-  #   # expected = "The queue has too many entries to find legislators."
-  #   #
-  #   # assert_equal expected, reporter.queue.district
-  #
-  #   reporter.load("./data/short_attendees.csv")
-  #   reporter.find("first_name sarah")
-  #   reporter.queue.district
-  #
-  #   assert_equal "", reporter.queue.data[0][:district]
-  # end
+  def test_sunlight_returns_districts_for_fewer_than_10_in_queue
+    reporter = EventReporter.new
+    reporter.load
+    reporter.find("first_name sarah")
 
-  # def test_print_returns_formatted_data
-  #   reporter = EventReporter.new
-  #   reporter.load
-  # end
+    refute reporter.queue.district
 
+    reporter.load("./data/short_attendees.csv")
+    reporter.find("first_name sarah")
+    reporter.queue.district
 
-
+    assert_equal "0", reporter.queue.data.first.district
+    assert_equal "13", reporter.queue.data.last.district
+  end
 end

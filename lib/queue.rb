@@ -1,3 +1,4 @@
+require "./lib/sunlight"
 require "csv"
 require "erb"
 
@@ -23,17 +24,21 @@ class Queue
   end
 
   def printing(dataset = @data)
-    header_lengths = find_greatest_length_per_column
-    total_records = @data.count
-    subsets = split_data_into_subsets_of_ten(dataset)
-    print_one_subset_at_a_time(subsets, header_lengths, total_records)
+    if dataset.empty?
+      puts "There is no data in the queue to print."
+    else
+      header_lengths = find_greatest_length_per_column
+      total_records = @data.count
+      subsets = split_data_into_subsets_of_ten(dataset)
+      print_one_subset_at_a_time(subsets, header_lengths, total_records)
+    end
   end
 
   def print_by(category)
-    sorted = @data.sort_by do |person|
+    @data = @data.sort_by do |person|
       person.send(category)
     end
-    printing(sorted)
+    printing
   end
 
   def export_to_html(file_name)
@@ -54,10 +59,21 @@ class Queue
     end
   end
 
+  def district
+    sunlight = Sunlight.new
+    if @data.count <= 10
+      @data.each do |person|
+        person.district = sunlight.district(person.zipcode)
+      end
+    else
+      puts "There are too many records to check for a district."
+    end
+  end
+
   private
 
   def print_header(header_lengths)
-    total_length = header_lengths.values.inject(:+) + (2 * header_lengths.count)
+    total_length = header_lengths.values.inject(:+) + (3 * header_lengths.count)
     puts "-" * total_length
     @order.each do |key, header|
       unless header_lengths[key].nil? || header_lengths[key].zero?
@@ -81,7 +97,9 @@ class Queue
 
   def find_greatest_length_per_column
     highest_total = {"regdate"=>0, "first_name"=> 10, "last_name"=>9,
-      "email_address"=>5, "homephone"=>5, "street"=>7, "city"=>4, "state"=>5, "zipcode"=>7}
+      "email_address"=>5, "homephone"=>5, "street"=>7, "city"=>4, "state"=>5,
+      "zipcode"=>7}
+    highest_total["district"] = 8 if @data.count <= 10
     @data.each do |person|
       highest_total.keys.each do |header|
         if person.send(header).length > highest_total[header]
