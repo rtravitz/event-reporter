@@ -1,6 +1,6 @@
 require "./lib/event_reporter"
 
-class Runner
+class Repl
   attr_accessor :er
   def initialize
     @er = EventReporter.new
@@ -56,4 +56,4 @@ class Runner
   end
 end
 
-Runner.new.run
+Repl.new.run

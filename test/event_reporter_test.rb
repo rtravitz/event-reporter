@@ -29,17 +29,6 @@ class EventReporterTest < Minitest::Test
     assert_equal 2, reporter.queue.count
   end
 
-  def test_data_is_cleaned
-    #original record: zipcode 200099, phone number with hyphens, and nil city.
-    reporter = EventReporter.new
-    reporter.load("./data/short_attendees.csv")
-    reporter.find("first_name sarah")
-    record = reporter.queue.data.first
-
-    assert_equal "20009", record.send("zipcode")
-    assert_equal "4145205000", record.send("homephone")
-    assert_equal "", record.send("city")
-  end
 
   def test_help_returns_proper_help_text
     reporter = EventReporter.new

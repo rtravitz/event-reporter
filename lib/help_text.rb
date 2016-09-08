@@ -4,7 +4,8 @@ class HelpText
   def initialize
     @help_text = "Available commands:\nload <filename>, help, help <command>,\nqueue count, queue clear, queue district, queue print,\nqueue print by <attribute>, queue save to <filename.csv>,\nqueue export html <filename.html>, find <attribute> <criteria>."
 
-    @help_text_for_commands = { "load <filename>" => "Erase any loaded data and parse the specified file. If no filename is given, default to event_attendees.csv.",
+    @help_text_for_commands = { 
+      "load <filename>" => "Erase any loaded data and parse the specified file. If no filename is given, default to event_attendees.csv.",
       "help" => "Output a listing of the available individual commands.",
       "help <command>" => "Output a description of how to use the specific command.",
       "queue count" => "Output how many records are in the current queue.",

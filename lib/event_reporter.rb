@@ -2,8 +2,10 @@ require "csv"
 require "./lib/queue"
 require "./lib/help_text"
 require "./lib/person"
+require "./lib/cleaner"
 
 class EventReporter
+  include Cleaner
   attr_reader :dataset, :queue
 
   def initialize
@@ -44,37 +46,12 @@ class EventReporter
     end
   end
 
-
-
   private
 
   def send_csv_data_to_dataset(file_path)
     CSV.foreach file_path, headers: true, header_converters: :symbol do |row|
-      @dataset << Person.new(clean_dataset(row))
+      @dataset << Person.new(Cleaner.clean_dataset(row))
     end
-  end
-
-  def clean_dataset(row)
-    row.each do |category, value|
-      row[category] = "" if value.nil?
-    end
-    row[:zipcode] = clean_zipcode(row[:zipcode])
-    row[:homephone] = clean_phone_numbers(row[:homephone])
-    row
-  end
-
-  def clean_zipcode(zipcode)
-    zipcode = zipcode.to_s.rjust(5,"0")[0..4]
-    zipcode.gsub!("00000", "")
-    zipcode
-  end
-
-  def clean_phone_numbers(number)
-    number = "" if number == "0"
-    unless number.empty?
-      number = number.gsub(/[\s+.()+E-]/, "").rjust(10, "0")
-    end
-    number[0..9]
   end
 
 end
