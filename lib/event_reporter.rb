@@ -23,13 +23,41 @@ class EventReporter
       puts "No file has been loaded to search."
     else
       @queue.clear
-      attribute = user_input.downcase.split.first
-      criteria = user_input.downcase.split[1..-1].join(" ")
-      @dataset.each do |person|
-        @queue.data << person if person.send(attribute).downcase == criteria
-      end
-      puts "Added results for '#{attribute} #{criteria}' to the queue."
+      attributes, criteria = get_attributes_and_criteria(user_input)
+      add_matching_results(attributes, criteria, user_input)
+      puts "Added search results for to the queue."
     end
+  end
+
+  def add_matching_results(attributes, criteria, input)
+    if multiple_searches?(input.split)
+      @dataset.each do |person|
+        if (person.send(attributes.first).downcase == criteria.first) && (person.send(attributes.last).downcase == criteria.last)
+          @queue.data << person
+        end
+      end
+    else
+      @dataset.each do |person|
+        @queue.data << person if person.send(attributes.first).downcase == criteria.first
+      end
+    end
+  end
+
+  def get_attributes_and_criteria(input)
+    split = input.downcase.split
+    if multiple_searches?(split)
+      attributes = [split[0], split[3]]
+      criteria = [split[1], split[4]]
+      return attributes, criteria
+    else
+      attributes = [split[0]]
+      criteria = [split[1]]
+      return attributes, criteria
+    end
+  end
+
+  def multiple_searches?(input)
+    input[2] == "and" ? true : false
   end
 
   def help(command = "")
