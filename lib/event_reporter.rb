@@ -25,7 +25,7 @@ class EventReporter
       @queue.clear
       attributes, criteria = get_attributes_and_criteria(user_input)
       add_matching_results(attributes, criteria, user_input)
-      puts "Added search results for to the queue."
+      puts "Added search results to the queue."
     end
   end
 
@@ -69,19 +69,21 @@ class EventReporter
   end
 
   def get_attributes_and_criteria(input)
-    split = input.downcase.split
-    if multiple_searches?(split)
-      attributes = [split[0], split[3]]
-      criteria = [split[1], split[4]]
+    split_input = input.downcase.split
+    if multiple_searches?(split_input)
+      first_search = input.split("and").first.strip.split
+      second_search = input.split("and").last.strip.split
+      attributes = [first_search.first, second_search.first]
+      criteria = [first_search[1..-1].join(" "), second_search[1..-1].join(" ")]
       return attributes, criteria
     else
-      attributes = [split[0]]
-      criteria = [split[1]]
+      attributes = [split_input[0]]
+      criteria = [split_input[1..-1].join(" ")]
       return attributes, criteria
     end
   end
 
   def multiple_searches?(input)
-    input[2] == "and" ? true : false
+    input.include?("and") ? true : false
   end
 end

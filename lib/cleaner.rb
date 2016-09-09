@@ -18,7 +18,7 @@ module Cleaner
   def self.clean_phone_numbers(number)
     number = "" if number == "0"
     unless number.empty?
-      number = number.gsub(/[\s+.()+En-]/, "").rjust(10, "0")
+      number = number.gsub(/[\s+.()+Exn-]/, "").rjust(10, "0")
     end
     number[0..9]
   end
