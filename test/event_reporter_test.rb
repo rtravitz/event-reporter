@@ -29,6 +29,19 @@ class EventReporterTest < Minitest::Test
     assert_equal 2, reporter.queue.count
   end
 
+  def test_find_properly_searches_for_multiple_criteria
+    reporter = EventReporter.new
+    reporter.load
+    reporter.find("first_name sarah and state CA")
+
+    reporter.queue.data.each do |record|
+      assert_equal record.send("first_name").downcase, "sarah"
+      assert_equal record.send("state").downcase, "ca"
+    end
+
+    assert_equal 4, reporter.queue.count
+  end
+
 
   def test_help_returns_proper_help_text
     reporter = EventReporter.new

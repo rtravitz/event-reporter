@@ -31,7 +31,7 @@ class Queue
   end
 
   def export_to_html(file_name)
-    template = ERB.new(File.read("./data/export_format.erb")).result(binding)
+    template = ERB.new(File.read("./lib/export_format.erb")).result(binding)
     File.open(file_name, "w"){|file| file.puts template}
   end
 

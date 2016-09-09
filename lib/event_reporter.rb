@@ -29,37 +29,6 @@ class EventReporter
     end
   end
 
-  def add_matching_results(attributes, criteria, input)
-    if multiple_searches?(input.split)
-      @dataset.each do |person|
-        if (person.send(attributes.first).downcase == criteria.first) && (person.send(attributes.last).downcase == criteria.last)
-          @queue.data << person
-        end
-      end
-    else
-      @dataset.each do |person|
-        @queue.data << person if person.send(attributes.first).downcase == criteria.first
-      end
-    end
-  end
-
-  def get_attributes_and_criteria(input)
-    split = input.downcase.split
-    if multiple_searches?(split)
-      attributes = [split[0], split[3]]
-      criteria = [split[1], split[4]]
-      return attributes, criteria
-    else
-      attributes = [split[0]]
-      criteria = [split[1]]
-      return attributes, criteria
-    end
-  end
-
-  def multiple_searches?(input)
-    input[2] == "and" ? true : false
-  end
-
   def help(command = "")
     helper = HelpText.new
     if command.empty?
@@ -82,4 +51,37 @@ class EventReporter
     end
   end
 
+  def add_matching_results(attributes, criteria, input)
+    if multiple_searches?(input.split)
+      @dataset.each do |person|
+        if (person.send(attributes.first).downcase == criteria.first) &&
+        (person.send(attributes.last).downcase == criteria.last)
+          @queue.data << person
+        end
+      end
+    else
+      @dataset.each do |person|
+        if person.send(attributes.first).downcase == criteria.first
+          @queue.data << person
+        end
+      end
+    end
+  end
+
+  def get_attributes_and_criteria(input)
+    split = input.downcase.split
+    if multiple_searches?(split)
+      attributes = [split[0], split[3]]
+      criteria = [split[1], split[4]]
+      return attributes, criteria
+    else
+      attributes = [split[0]]
+      criteria = [split[1]]
+      return attributes, criteria
+    end
+  end
+
+  def multiple_searches?(input)
+    input[2] == "and" ? true : false
+  end
 end

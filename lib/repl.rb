@@ -2,6 +2,7 @@ require "./lib/event_reporter"
 
 class Repl
   attr_accessor :er
+
   def initialize
     @er = EventReporter.new
   end

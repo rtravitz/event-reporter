@@ -13,5 +13,13 @@ class PersonTest < Minitest::Test
 
     assert_equal "Ryan", person.first_name
     assert_equal "20002", person.zipcode
+    assert_equal "3/28/91", person.regdate
+    assert_equal "Travitz", person.last_name
+    assert_equal "rtravitz@gmail.com", person.email_address
+    assert_equal "919-609-3220", person.homephone
+    assert_equal "1175 3rd Street NE", person.street
+    assert_equal "Washington", person.city
+    assert_equal "DC", person.state
+    assert_equal "20002", person.zipcode
   end
 end
